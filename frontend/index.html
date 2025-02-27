@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">       
+    <title>SURAKSHA</title>
+    <link rel="icon" href="C:\Users\KIIT\suraksha\logo top.png" type="image/png">                           <!-- yaha pe surakhsha logo for title -->        
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eaf4fc;
+            color: #4a4a4a;
+        }
+
+        a {
+            color: black;
+            font-size: 20px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-right: 20px;
+            padding: 10px 20px;
+            text-decoration: none;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #a1d6fc;
+            color: #333;
+        }
+
+        header img {
+            height: 40px;
+        }
+
+        nav {
+            background-color: #d6eaff;
+            color: #333;
+            padding: 10px 20px;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-list li {
+            position: relative;
+            margin: 0 15px;
+        }
+
+        .nav-list a {
+            color: #4a4a4a;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-list a:hover {
+            background-color: #9cd1f5;
+            border-radius: 5px;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #ffffff;
+            color: #333;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+            display: none;
+            z-index: 1;
+        }
+
+        .dropdown a {
+            color: #4a4a4a;
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .dropdown a:hover {
+            background-color: #ade1f6;
+        }
+
+        .nav-list li:hover .dropdown {
+            display: block;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-container img {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            z-index: 2;
+            width: 500px;
+            height: auto;
+        }
+
+        .disease-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            padding: 20px;
+            justify-content: center;
+            margin-bottom: 170px;
+        }
+
+        .disease-card {
+            position: relative;
+            width: 220px;
+            height: 240px;
+            perspective: 1000px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .disease-card:hover {
+            transform: scale(1.05);
+        }
+
+        .card-inner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .disease-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .card-front {
+            background-color: #bee3fc;
+            color: #333;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 15px;
+        }
+
+        .card-back {
+            background-color: #f1faff;
+            color: #4a4a4a;
+            transform: rotateY(180deg);
+            font-size: 14px;
+            padding: 15px;
+        }
+
+        .card-front img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border-radius: 50%;
+            border: 2px solid #4a4a4a;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #a1d6fc;
+            color: #4a4a4a;
+            margin-top: 30px;
+        }
+
+        #datetime {
+            color: black;
+            background-color: #a1d6fc;
+            justify-content: center;
+            text-align: center;
+            font-size: 20px;
+            padding: 10px 20px;
+        }
+
+        .chatbot-container {
+            position: fixed;
+            width: 270px;
+            bottom: 20px;
+            right: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            opacity: var(--chatbot-opacity);
+            transition: opacity 0.5s ease;
+        }
+
+        .chat-header {
+            background-color: #a1d6fc;
+            color: #fff;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+
+        .chat-footer {
+            display: flex;
+            padding: 10px;
+            background-color: #f1f1f1;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ffffff;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .chat-footer button {
+            padding: 10px 15px;
+            background-color: #a1d6fc;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .chat-footer button:hover {
+            background-color: #4083b4;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 80%;
+        }
+
+        .chat-message.bot {
+            background-color: #e0f7fa;
+            color: #000000;
+            align-self: flex-start;
+        }
+
+        .chat-message.user {
+            background-color: #c8e6c9;
+            color: #b6e1ff;
+            align-self: flex-end;
+        }
+        #show-chat {
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        padding: 10px 15px;
+        background-color: #3787c1;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.5s ease;
+}
+    #show-chat:hover {
+    background-color: #13639c;
+    color: #f8f8f8;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px #00000033;
+}
+
+    </style>
+</head>
+<body>
+    <div id="datetime"></div>
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const formattedDateTime = now.toLocaleString();
+            document.getElementById('datetime').innerHTML = formattedDateTime;
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+    </script>   
+    <header>
+        <img src="C:\Users\KIIT\Desktop\suraksha-removebg-preview.png" alt="Suraksha Logo">                     <!-- yaha pe suraksha ka image jo ki left top me hoga  -->  
+        <div class="language-select-container">
+            <select class="language-select" id="language-select" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+            </select>
+        </div>
+    </header>
+
+    <nav>
+        <ul class="nav-list">
+            <li><a href="#">Home</a></li>
+            <li>
+                <a href="#">About Suraksha Healthcare</a>
+                <div class="dropdown">
+                    <a href="#">Our Mission</a>
+                    <a href="#">Our Team</a>
+                    <a href="#">Achievements</a>
+                </div>
+            </li>
+            <li>
+                <a href="#">Ambulance Number</a>
+                <div class="dropdown">
+                    <a href="#">Emergency Numbers</a>
+                    <a href="#">Nearest Ambulances</a>
+                    <a href="#">Add Your Location</a>
+                </div>
+            </li>
+            <li>
+                <a href="#">Help and Support</a>
+                <div class="dropdown">
+                    <a href="#">FAQs</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">24/7 Assistance</a>
+                </div>
+            </li>
+            <li>
+                <a href="#">Real-Time Analytics</a>
+                <div class="dropdown">
+                    <a href="#">Health Monitoring</a>
+                    <a href="#">Smartwatch Integration</a>
+                    <a href="#">Data Insights</a>
+                </div>
+            </li>
+            <li>
+                <a href="#">Fast Responder</a>
+                <div class="dropdown">
+                    <a href="#">How It Works</a>
+                    <a href="#">Track Ambulance</a>
+                    <a href="#">Dispatch History</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+ <marquee scrollamount="7">
+        <a href="">Emergency Assistance</a>
+<a href="">Safety Resources</a>
+<a href="">Health & Wellness</a>
+<a href="">Real-Time Updates</a>
+<a href="">Community Support</a>
+        <a href="">Technology & Safety</a></marquee>
+
+    <div class="video-container">
+        <video autoplay muted loop>
+            <source src="C:\Users\KIIT\suraksha\banner-video.mp4" type="video/mp4">                            <!-- yaha pe video hoga  --> 
+            Your browser does not support the video tag.
+        </video>
+        <img src="C:\Users\KIIT\Desktop\suraksha-removebg-preview.png" alt="Overlay Image">                      <!-- yaha pe wahi suraksha ka image hoga  --> 
+    </div>
+
+    <main>
+        <div class="disease-container" id="disease-cards"></div>
+    </main>
+
+    <script>
+        const content = {
+            en: {
+                "cardiac-arrest": {
+                    front: "Cardiac Arrest",
+                    back: "1. Perform CPR immediately.\n2. Use a defibrillator (AED).",
+                    video: "https://www.youtube.com/embed/9emAmwJ3vFw", 
+                    image: "C:/Users/KIIT/suraksha/cardiac.jpg"
+                },
+                "asthma": {
+                    front: "Asthma",
+                    back: "1. Use a rescue inhaler.\n2. Take steroids to reduce swelling.",
+                    video: "https://www.youtube.com/embed/dQw4w9WgXcQ", 
+                    image: "C:/Users/KIIT/suraksha/asthama.jpg"
+                },
+                "seizure": {
+                    front: "Seizure Attack",
+                    back: "1. Take prescribed medication.\n2. Lay the person on their side for safety.",
+                    video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                    image: "C:/Users/KIIT/suraksha/seizure.jpg"
+                },
+                "skin-burn": {
+                    front: "Skin Burn",
+                    back: "1. Run under cool water.\n2. Apply antibiotic cream.",
+                    video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                    image: "C:/Users/KIIT/suraksha/skin burn.jpg"
+                },
+                "cuts": {
+                    front: "Cuts",
+                    back: "1. Clean with soap and water.\n2. Cover with a bandage.",
+                    video: "https://www.youtube.com/embed/dQw4w9WgXcQ", 
+                    image: "C:/Users/KIIT/suraksha/cuts.jpg"
+                }
+            },
+            hi: {
+                "cardiac-arrest": {
+                    front: "हृदय गति रुकना",
+                    back: "1. तुरंत सीपीआर करें।\n2. डिफिब्रिलेटर (AED) का उपयोग करें।",
+                    video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                    image: "C:/Users/KIIT/suraksha/cardiac.jpg"
+                },
+                "asthma": {
+                    front: "दमा",
+                    back: "1. बचाव इनहेलर का उपयोग करें।\n2. सूजन कम करने के लिए स्टेरॉयड लें।",
+                    video: "https://www.youtube.com/embed/dQw4w9WgXcQ", 
+                    image: "C:/Users/KIIT/suraksha/asthama.jpg"
+                },
+                "seizure": {
+                    front: "दौरा पड़ना",
+                    back: "1. निर्धारित दवा लें।\n2. सुरक्षा के लिए व्यक्ति को उनके पक्ष में लिटाएं।",
+                    video: "https://www.youtube.com/embed/dQw4w9WgXcQ", 
+                    image: "C:/Users/KIIT/suraksha/seizure.jpg"
+                },
+                "skin-burn": {
+                    front: "त्वचा का जलना",
+                    back: "1. ठंडे पानी के नीचे रखें।\n2. एंटीबायोटिक क्रीम लगाएं।",
+                    video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                    image: "C:/Users/KIIT/suraksha/skin burn.jpg"
+                },
+                "cuts": {
+                    front: "कटना",
+                    back: "1. साबुन और पानी से साफ करें।\n2. पट्टी लगाएं।",
+                    video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                    image: "C:/Users/KIIT/suraksha/cuts.jpg"
+                }
+            }
+        };
+
+        function changeLanguage() {
+            const language = document.getElementById('language-select').value;
+            const diseaseContainer = document.getElementById('disease-cards');
+            diseaseContainer.innerHTML = '';
+
+            const langContent = content[language];
+            Object.keys(langContent).forEach((key) => {
+                const diseaseData = langContent[key];
+                const card = document.createElement('div');
+                card.className = 'disease-card';
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="${diseaseData.image}" alt="${diseaseData.front}" />
+                            <p>${diseaseData.front}</p>
+                        </div>
+                        <div class="card-back">
+                            <p>${diseaseData.back}</p>
+                            <iframe width="100%" height="180" src="${diseaseData.video}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                `;
+                diseaseContainer.appendChild(card);
+            });
+        }
+
+        changeLanguage();
+    </script>
+<div class="chatbot-container">
+    <div class="chat-header">
+      <h3>Suraksha</h3>
+      <button id="close-chat">X</button>
+    </div>
+    <div class="chat-body" id="chat-body">
+      <div class="chat-message bot">
+        Hello! I am Suraksha. How can I be of help to you today?
+      </div>
+    </div>
+    <div class="chat-footer">
+      <input type="text" id="chat-input" placeholder="Type your message here..." />
+      <button id="send-btn">Send</button>
+    </div>
+  </div><button id="show-chat">Suraksha - Healthcare companion</button>
+  <script>
+ window.addEventListener('scroll', () => {
+    const chatbot = document.querySelector('.chatbot-container');
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPosition = window.scrollY;
+    const opacity = Math.min(1, scrollPosition / maxScroll);
+    chatbot.style.setProperty('--chatbot-opacity', opacity);
+});
+const chatbotContainer = document.querySelector('.chatbot-container');
+const closeChatButton = document.getElementById('close-chat');
+const showChatButton = document.getElementById('show-chat');
+showChatButton.style.display = 'none';
+closeChatButton.addEventListener('click', () => {
+    chatbotContainer.style.display = 'none';
+    showChatButton.style.display = 'block';
+});
+showChatButton.addEventListener('click', () => {
+    chatbotContainer.style.display = 'flex';
+    showChatButton.style.display = 'none';
+});
+       </script>
+    <footer>
+        <p>© 2025 Suraksha Healthcare</p>
+<div class="social-links">
+            <a href="#">Facebook</a> | 
+            <a href="#">Twitter</a> | 
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+</body>
+</html>
